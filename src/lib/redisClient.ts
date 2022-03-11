@@ -48,7 +48,7 @@ async function get(key: KeyType) {
   if (result) {
     return JSON.parse(result)
   } else {
-    return ''
+    return null
   }
 }
 
