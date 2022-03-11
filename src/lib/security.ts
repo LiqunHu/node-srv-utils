@@ -10,9 +10,11 @@ export interface SecureConfig {
   SYSTEM_TOKEN_AGE: number
 }
 
-interface DataStoredInToken {
+export interface DataStoredInToken {
   type: string
   user_id: string
+  exp: number
+  token?: string
 }
 
 let logger = console
@@ -47,35 +49,42 @@ function user2token(type: string, userId: string): string | null {
   }
 }
 
+async function tokenVerify(req: Request): Promise<DataStoredInToken | null> {
+  let token_str =
+    req.cookies['Authorization'] ||
+    (req.header('Authorization')
+      ? req.header('Authorization').split('Bearer ')[1]
+      : null)
+  if (!token_str) {
+    logger.debug('no token')
+    return null
+  }
+
+  let tokenData = (await verify(
+    token_str,
+    config.SECRET_KEY
+  )) as DataStoredInToken
+
+  tokenData.token = token_str
+  return tokenData
+}
+
 async function token2user(req: Request): Promise<number> {
   try {
-    let token_str =
-      req.cookies['Authorization'] ||
-      (req.header('Authorization')
-        ? req.header('Authorization').split('Bearer ')[1]
-        : null)
-    if (!token_str) {
-      logger.debug('no token')
+    let tokenData = await tokenVerify(req)
+    if (!tokenData) {
+      logger.debug('tokenVerify error')
       return -1
     }
+    let token = tokenData.token,
+      expires = tokenData.exp,
+      type = tokenData.type,
+      user_id = tokenData.user_id
 
-    let tokensplit = token_str.split('_')
-    if (tokensplit.length != 2) {
-      return -1
-    }
-
-    let token = tokensplit[0],
-      expires = tokensplit[1]
-
-    if (parseInt(expires) < Date.now()) {
+    if (expires < Date.now()) {
       logger.debug('expires')
       return -3
     }
-
-    const { type, user_id } = (await verify(
-      token,
-      config.SECRET_KEY
-    )) as DataStoredInToken
 
     let authData = await redisClient.get(['AUTH', type, user_id].join('_'))
     if (authData) {
@@ -86,7 +95,7 @@ async function token2user(req: Request): Promise<number> {
       }
       req.user = user
 
-      if (authData.session_token != token_str) {
+      if (authData.session_token != token) {
         logger.debug('login from other place')
         return -2
       }
@@ -148,6 +157,7 @@ export default {
   setLogger,
   setSecureConfig,
   user2token,
+  tokenVerify,
   token2user,
   aesDecryptModeCFB,
 }

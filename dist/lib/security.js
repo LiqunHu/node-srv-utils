@@ -45,27 +45,34 @@ function user2token(type, userId) {
         return null;
     }
 }
+function tokenVerify(req) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let token_str = req.cookies['Authorization'] ||
+            (req.header('Authorization')
+                ? req.header('Authorization').split('Bearer ')[1]
+                : null);
+        if (!token_str) {
+            logger.debug('no token');
+            return null;
+        }
+        let tokenData = (yield (0, jsonwebtoken_1.verify)(token_str, config.SECRET_KEY));
+        tokenData.token = token_str;
+        return tokenData;
+    });
+}
 function token2user(req) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let token_str = req.cookies['Authorization'] ||
-                (req.header('Authorization')
-                    ? req.header('Authorization').split('Bearer ')[1]
-                    : null);
-            if (!token_str) {
-                logger.debug('no token');
+            let tokenData = yield tokenVerify(req);
+            if (!tokenData) {
+                logger.debug('tokenVerify error');
                 return -1;
             }
-            let tokensplit = token_str.split('_');
-            if (tokensplit.length != 2) {
-                return -1;
-            }
-            let token = tokensplit[0], expires = tokensplit[1];
-            if (parseInt(expires) < Date.now()) {
+            let token = tokenData.token, expires = tokenData.exp, type = tokenData.type, user_id = tokenData.user_id;
+            if (expires < Date.now()) {
                 logger.debug('expires');
                 return -3;
             }
-            const { type, user_id } = (yield (0, jsonwebtoken_1.verify)(token, config.SECRET_KEY));
             let authData = yield redisClient_1.default.get(['AUTH', type, user_id].join('_'));
             if (authData) {
                 let user = authData.user;
@@ -74,7 +81,7 @@ function token2user(req) {
                     return -1;
                 }
                 req.user = user;
-                if (authData.session_token != token_str) {
+                if (authData.session_token != token) {
                     logger.debug('login from other place');
                     return -2;
                 }
@@ -130,6 +137,7 @@ exports.default = {
     setLogger,
     setSecureConfig,
     user2token,
+    tokenVerify,
     token2user,
     aesDecryptModeCFB,
 };
