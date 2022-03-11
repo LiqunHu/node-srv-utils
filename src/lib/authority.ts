@@ -85,5 +85,6 @@ export default {
   initMiddleware,
   authMiddleware,
   aesDecryptModeCFB: security.aesDecryptModeCFB,
-  user2token: security.user2token
+  user2token: security.user2token,
+  tokenVerify: security.tokenVerify,
 }

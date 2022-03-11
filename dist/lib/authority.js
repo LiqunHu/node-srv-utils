@@ -91,5 +91,6 @@ exports.default = {
     initMiddleware,
     authMiddleware,
     aesDecryptModeCFB: security_1.default.aesDecryptModeCFB,
-    user2token: security_1.default.user2token
+    user2token: security_1.default.user2token,
+    tokenVerify: security_1.default.tokenVerify,
 };
