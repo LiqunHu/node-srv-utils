@@ -48,7 +48,7 @@ function get(key) {
             return JSON.parse(result);
         }
         else {
-            return '';
+            return null;
         }
     });
 }
