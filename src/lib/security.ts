@@ -81,7 +81,7 @@ async function token2user(req: Request): Promise<number> {
       type = tokenData.type,
       user_id = tokenData.user_id
 
-    if (expires < Date.now()) {
+    if (expires < Date.now()/1000) {
       logger.debug('expires')
       return -3
     }

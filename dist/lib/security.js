@@ -69,7 +69,7 @@ function token2user(req) {
                 return -1;
             }
             let token = tokenData.token, expires = tokenData.exp, type = tokenData.type, user_id = tokenData.user_id;
-            if (expires < Date.now()) {
+            if (expires < Date.now() / 1000) {
                 logger.debug('expires');
                 return -3;
             }
