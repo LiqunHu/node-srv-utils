@@ -28,38 +28,38 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction) {
       for (let a of apiList) {
         apis[a.api_function] = a.auth_flag
       }
+    }
 
-      let patha = req.path.split('/')
-      let func = patha[patha.length - 2].toUpperCase()
+    let patha = req.path.split('/')
+    let func = patha[patha.length - 2].toUpperCase()
 
-      let checkresult = await security.token2user(req)
+    let checkresult = await security.token2user(req)
 
-      if (func in apis) {
-        if (apis[func] === '1') {
-          if (checkresult != 0) {
-            if (checkresult === -2) {
-              logger.info('UNAUTHORIZED')
-              return res.status(401).send({
-                errno: -2,
-                msg: 'Login from other place',
-              })
-            } else {
-              logger.info('UNAUTHORIZED')
-              return res.status(401).send({
-                errno: -1,
-                msg: 'Auth Failed or session expired',
-              })
-            }
+    if (func in apis) {
+      if (apis[func] === '1') {
+        if (checkresult != 0) {
+          if (checkresult === -2) {
+            logger.info('UNAUTHORIZED')
+            return res.status(401).send({
+              errno: -2,
+              msg: 'Login from other place',
+            })
+          } else {
+            logger.info('UNAUTHORIZED')
+            return res.status(401).send({
+              errno: -1,
+              msg: 'Auth Failed or session expired',
+            })
           }
         }
-      } else {
-        if (func != 'AUTH') {
-          logger.info('UNAUTHORIZED')
-          return res.status(401).send({
-            errno: -1,
-            msg: 'Auth Failed or session expired',
-          })
-        }
+      }
+    } else {
+      if (func != 'AUTH') {
+        logger.info('UNAUTHORIZED')
+        return res.status(401).send({
+          errno: -1,
+          msg: 'Auth Failed or session expired',
+        })
       }
     }
   } catch (error: any) {
