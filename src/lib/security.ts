@@ -73,7 +73,6 @@ async function token2user(req: Request): Promise<number> {
   try {
     let tokenData = await tokenVerify(req)
     if (!tokenData) {
-      logger.debug('tokenVerify error')
       return -1
     }
     let token = tokenData.token,

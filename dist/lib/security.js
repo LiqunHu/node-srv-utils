@@ -65,7 +65,6 @@ function token2user(req) {
         try {
             let tokenData = yield tokenVerify(req);
             if (!tokenData) {
-                logger.debug('tokenVerify error');
                 return -1;
             }
             let token = tokenData.token, expires = tokenData.exp, type = tokenData.type, user_id = tokenData.user_id;
