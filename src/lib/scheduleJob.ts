@@ -7,7 +7,7 @@ function setLogger(appointLogger: any) {
   logger = appointLogger.createLogger(__filename)
 }
 
-interface scheduleConfig {
+export interface scheduleConfig {
   name: string
   rule: string
 }

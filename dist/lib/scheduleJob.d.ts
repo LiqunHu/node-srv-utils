@@ -1,5 +1,5 @@
 declare function setLogger(appointLogger: any): void;
-interface scheduleConfig {
+export interface scheduleConfig {
     name: string;
     rule: string;
 }
