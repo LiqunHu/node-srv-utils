@@ -17,8 +17,8 @@ const redisClient_1 = __importDefault(require("./redisClient"));
 const security_1 = __importDefault(require("./security"));
 let logger = console;
 let dbhandle;
-function setLogger(appointLogger) {
-    logger = appointLogger.createLogger(__filename);
+function setLogger(createLogger) {
+    logger = createLogger(__filename);
 }
 function initMiddleware(dbhandle, config) {
     dbhandle = dbhandle;

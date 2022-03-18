@@ -20,8 +20,8 @@ export interface DataStoredInToken {
 let logger = console
 let config: SecureConfig
 
-function setLogger(appointLogger: any) {
-  logger = appointLogger.createLogger(__filename)
+function setLogger(createLogger: any) {
+  logger = createLogger(__filename)
 }
 
 function setSecureConfig(cfg: SecureConfig) {

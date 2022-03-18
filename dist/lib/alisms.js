@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const pop_core_1 = __importDefault(require("@alicloud/pop-core"));
 let logger = console;
 let client;
-function setLogger(appointLogger) {
-    logger = appointLogger.createLogger(__filename);
+function setLogger(createLogger) {
+    logger = createLogger(__filename);
 }
 function initAlicloud(config) {
     client = new pop_core_1.default({

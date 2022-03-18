@@ -2,8 +2,8 @@ import Core from '@alicloud/pop-core'
 let logger = console
 let client: Core
 
-function setLogger(appointLogger: any) {
-  logger = appointLogger.createLogger(__filename)
+function setLogger(createLogger: any) {
+  logger = createLogger(__filename)
 }
 
 export interface AlismsConfig {

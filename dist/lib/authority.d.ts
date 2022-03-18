@@ -1,7 +1,7 @@
 /// <reference types="qs" />
 import { Request, Response, NextFunction } from 'express';
 export { SecureConfig } from './security';
-declare function setLogger(appointLogger: any): void;
+declare function setLogger(createLogger: any): void;
 declare function initMiddleware(dbhandle: any, config: any): void;
 declare function authMiddleware(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>>>;
 declare const _default: {

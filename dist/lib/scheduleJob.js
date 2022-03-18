@@ -7,8 +7,8 @@ const lodash_1 = __importDefault(require("lodash"));
 const node_schedule_1 = __importDefault(require("node-schedule"));
 let logger = console;
 let scheduleJobs = Object.create(null);
-function setLogger(appointLogger) {
-    logger = appointLogger.createLogger(__filename);
+function setLogger(createLogger) {
+    logger = createLogger(__filename);
 }
 function initSchedule(cfg, router) {
     if (scheduleJobs) {

@@ -1,4 +1,4 @@
-declare function setLogger(appointLogger: any): void;
+declare function setLogger(createLogger: any): void;
 export interface AlismsConfig {
     accessKeyId: string;
     accessKeySecret: string;

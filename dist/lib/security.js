@@ -17,8 +17,8 @@ const jsonwebtoken_1 = require("jsonwebtoken");
 const redisClient_1 = __importDefault(require("./redisClient"));
 let logger = console;
 let config;
-function setLogger(appointLogger) {
-    logger = appointLogger.createLogger(__filename);
+function setLogger(createLogger) {
+    logger = createLogger(__filename);
 }
 function setSecureConfig(cfg) {
     config = cfg;

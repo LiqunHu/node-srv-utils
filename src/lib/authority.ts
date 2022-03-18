@@ -7,8 +7,8 @@ export { SecureConfig } from './security'
 let logger = console
 let dbhandle: any
 
-function setLogger(appointLogger: any) {
-  logger = appointLogger.createLogger(__filename)
+function setLogger(createLogger: any) {
+  logger = createLogger(__filename)
 }
 
 function initMiddleware(dbhandle: any, config: any) {

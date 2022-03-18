@@ -11,7 +11,7 @@ export interface DataStoredInToken {
     exp: number;
     token?: string;
 }
-declare function setLogger(appointLogger: any): void;
+declare function setLogger(createLogger: any): void;
 declare function setSecureConfig(cfg: SecureConfig): void;
 declare function user2token(type: string, userId: string): string | null;
 declare function tokenVerify(req: Request): Promise<DataStoredInToken | null>;

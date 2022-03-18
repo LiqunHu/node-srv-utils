@@ -3,8 +3,8 @@ import schedule from 'node-schedule'
 let logger = console
 let scheduleJobs: { [index: string]: any } = Object.create(null)
 
-function setLogger(appointLogger: any) {
-  logger = appointLogger.createLogger(__filename)
+function setLogger(createLogger: any) {
+  logger = createLogger(__filename)
 }
 
 export interface scheduleConfig {
