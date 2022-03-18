@@ -12,9 +12,9 @@ const alisms_1 = __importDefault(require("./lib/alisms"));
 exports.alisms = alisms_1.default;
 const scheduleJob_1 = __importDefault(require("./lib/scheduleJob"));
 exports.scheduleJob = scheduleJob_1.default;
-const setLogger = (appointLogger) => {
+function setLogger(appointLogger) {
     alisms_1.default.setLogger(appointLogger);
     authority_1.default.setLogger(appointLogger);
     scheduleJob_1.default.setLogger(appointLogger);
-};
+}
 exports.setLogger = setLogger;

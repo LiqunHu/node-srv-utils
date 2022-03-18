@@ -3,7 +3,7 @@ import authority from './lib/authority'
 import alisms from './lib/alisms'
 import scheduleJob from './lib/scheduleJob'
 
-const setLogger = (appointLogger: any) => {
+function setLogger(appointLogger: any) {
   alisms.setLogger(appointLogger)
   authority.setLogger(appointLogger)
   scheduleJob.setLogger(appointLogger)
