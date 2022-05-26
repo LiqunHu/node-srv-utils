@@ -123,7 +123,7 @@ function token2user(req) {
     });
 }
 function aesDecryptModeECB(msg, pwd) {
-    let key = crypto_js_1.default.enc.Hex.parse(pwd);
+    let key = crypto_js_1.default.enc.Utf8.parse(pwd);
     let decrypted = crypto_js_1.default.AES.decrypt(msg, key, {
         mode: crypto_js_1.default.mode.ECB,
         padding: crypto_js_1.default.pad.ZeroPadding,

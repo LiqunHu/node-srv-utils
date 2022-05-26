@@ -141,7 +141,7 @@ async function token2user(req: Request): Promise<number> {
 }
 
 function aesDecryptModeECB(msg: string, pwd: string): string {
-  let key = CryptoJS.enc.Hex.parse(pwd)
+  let key = CryptoJS.enc.Utf8.parse(pwd)
 
   let decrypted = CryptoJS.AES.decrypt(msg, key, {
     mode: CryptoJS.mode.ECB,
