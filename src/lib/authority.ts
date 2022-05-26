@@ -84,7 +84,7 @@ export default {
   setLogger,
   initMiddleware,
   authMiddleware,
-  aesDecryptModeCFB: security.aesDecryptModeCFB,
+  aesDecryptModeECB: security.aesDecryptModeECB,
   user2token: security.user2token,
   tokenVerify: security.tokenVerify,
 }

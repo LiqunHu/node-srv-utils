@@ -140,14 +140,12 @@ async function token2user(req: Request): Promise<number> {
   }
 }
 
-function aesDecryptModeCFB(msg: string, pwd: string, magicNo: string): string {
+function aesDecryptModeECB(msg: string, pwd: string): string {
   let key = CryptoJS.enc.Hex.parse(pwd)
-  let iv = CryptoJS.enc.Hex.parse(magicNo)
 
   let decrypted = CryptoJS.AES.decrypt(msg, key, {
-    iv: iv,
-    mode: CryptoJS.mode.CBC,
-    padding: CryptoJS.pad.Pkcs7,
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.ZeroPadding,
   }).toString(CryptoJS.enc.Utf8)
   return decrypted
 }
@@ -158,5 +156,5 @@ export default {
   user2token,
   tokenVerify,
   token2user,
-  aesDecryptModeCFB,
+  aesDecryptModeECB,
 }

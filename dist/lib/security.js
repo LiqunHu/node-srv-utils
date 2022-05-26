@@ -122,13 +122,11 @@ function token2user(req) {
         }
     });
 }
-function aesDecryptModeCFB(msg, pwd, magicNo) {
+function aesDecryptModeECB(msg, pwd) {
     let key = crypto_js_1.default.enc.Hex.parse(pwd);
-    let iv = crypto_js_1.default.enc.Hex.parse(magicNo);
     let decrypted = crypto_js_1.default.AES.decrypt(msg, key, {
-        iv: iv,
-        mode: crypto_js_1.default.mode.CBC,
-        padding: crypto_js_1.default.pad.Pkcs7,
+        mode: crypto_js_1.default.mode.ECB,
+        padding: crypto_js_1.default.pad.ZeroPadding,
     }).toString(crypto_js_1.default.enc.Utf8);
     return decrypted;
 }
@@ -138,5 +136,5 @@ exports.default = {
     user2token,
     tokenVerify,
     token2user,
-    aesDecryptModeCFB,
+    aesDecryptModeECB,
 };
