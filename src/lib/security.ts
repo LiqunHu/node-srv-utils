@@ -60,13 +60,17 @@ async function tokenVerify(req: Request): Promise<DataStoredInToken | null> {
     return null
   }
 
-  let tokenData = (await verify(
-    token_str,
-    config.SECRET_KEY
-  )) as DataStoredInToken
+  try {
+    let tokenData = (await verify(
+      token_str,
+      config.SECRET_KEY
+    )) as DataStoredInToken
 
-  tokenData.token = token_str
-  return tokenData
+    tokenData.token = token_str
+    return tokenData
+  } catch (error) {
+    return null
+  }
 }
 
 async function token2user(req: Request): Promise<number> {
@@ -80,7 +84,7 @@ async function token2user(req: Request): Promise<number> {
       type = tokenData.type,
       user_id = tokenData.user_id
 
-    if (expires < Date.now()/1000) {
+    if (expires < Date.now() / 1000) {
       logger.debug('expires')
       return -3
     }
