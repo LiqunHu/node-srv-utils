@@ -2,12 +2,13 @@ import Redis, {
   RedisOptions,
   ClusterOptions,
   ClusterNode,
-  KeyType,
-  ValueType,
+  Cluster,
+  RedisKey,
+  RedisValue,
 } from 'ioredis'
 
-let client: Redis.Redis
-let cluster: Redis.Cluster
+let client: Redis
+let cluster: Cluster
 
 function initClient(config: RedisOptions) {
   client = new Redis(config)
@@ -28,22 +29,27 @@ XX -- Only set the key if it already exist.
 KEEPTTL -- Retain the time to live associated with the key
 */
 async function set(
-  key: KeyType,
+  key: RedisKey,
   value: any,
-  expiryMode?: string | any[],
-  time?: number | string,
-  setMode?: number | string
+  expiryMode?: 'NX' | 'XX' | 'PX' | 'EX',
+  time?: number | string
 ) {
-  if (!!setMode) {
-    await client.set(key, JSON.stringify(value), expiryMode, time, setMode)
-  } else if (!!expiryMode) {
-    await client.set(key, JSON.stringify(value), expiryMode, time)
+  if (!!expiryMode) {
+    if (expiryMode == 'NX') {
+      await client.set(key, JSON.stringify(value), 'NX')
+    } else if (expiryMode == 'XX') {
+      await client.set(key, JSON.stringify(value), 'XX')
+    } else if (expiryMode == 'EX') {
+      await client.set(key, JSON.stringify(value), 'EX', time)
+    } else if (expiryMode == 'PX') {
+      await client.set(key, JSON.stringify(value), 'PX', time)
+    }
   } else {
     await client.set(key, JSON.stringify(value))
   }
 }
 
-async function get(key: KeyType) {
+async function get(key: RedisKey) {
   let result = await client.get(key)
   if (result) {
     return JSON.parse(result)
@@ -52,44 +58,44 @@ async function get(key: KeyType) {
   }
 }
 
-async function del(key: KeyType) {
+async function del(key: RedisKey) {
   await client.del(key)
 }
 
 async function hmset(
-  key: KeyType,
+  key: RedisKey,
   data:
-    | Map<string, ValueType>
-    | ValueType[]
+    | Map<string, RedisValue>
+    | RedisValue[]
     | {
-        [key: string]: ValueType
+        [key: string]: RedisValue
       }
 ) {
   await client.hmset(key, data)
 }
 
 async function hset(
-  key: KeyType,
-  data: any[] | { [key: string]: any } | Map<string, ValueType>
+  key: RedisKey,
+  data: any[] | { [key: string]: any } | Map<string, RedisValue>
 ) {
   await client.hset(key, data)
 }
 
-async function hgetall(key: KeyType) {
+async function hgetall(key: RedisKey) {
   let result = await client.hgetall(key)
   return result
 }
 
-async function hget(key: KeyType, field: string) {
+async function hget(key: RedisKey, field: string) {
   let result = await client.hget(key, field)
   return result
 }
 
-async function hdel(key: KeyType, args: KeyType[]) {
-  await client.hdel(key, args)
+async function hdel(key: RedisKey, ...args: (string | Buffer)[]) {
+  await client.hdel(key, ...args)
 }
 
-async function ttl(key: KeyType): Promise<number> {
+async function ttl(key: RedisKey): Promise<number> {
   let result = await client.ttl(key)
   return result
 }
@@ -104,5 +110,5 @@ export default {
   hgetall,
   hget,
   hdel,
-  ttl
+  ttl,
 }
