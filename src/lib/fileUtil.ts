@@ -54,5 +54,6 @@ async function fileSaveLocal(req: Request, svpath: string, urlbase: string) {
 }
 
 export default {
+  setLogger,
   fileSaveLocal,
 }
