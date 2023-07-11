@@ -1,18 +1,19 @@
-import { RedisOptions, KeyType, ValueType } from 'ioredis';
+/// <reference types="node" />
+import { RedisOptions, RedisKey, RedisValue } from 'ioredis';
 declare function initClient(config: RedisOptions): void;
-declare function set(key: KeyType, value: any, expiryMode?: string | any[], time?: number | string, setMode?: number | string): Promise<void>;
-declare function get(key: KeyType): Promise<any>;
-declare function del(key: KeyType): Promise<void>;
-declare function hmset(key: KeyType, data: Map<string, ValueType> | ValueType[] | {
-    [key: string]: ValueType;
+declare function set(key: RedisKey, value: any, expiryMode?: 'NX' | 'XX' | 'PX' | 'EX', time?: number | string): Promise<void>;
+declare function get(key: RedisKey): Promise<any>;
+declare function del(key: RedisKey): Promise<void>;
+declare function hmset(key: RedisKey, data: Map<string, RedisValue> | RedisValue[] | {
+    [key: string]: RedisValue;
 }): Promise<void>;
-declare function hset(key: KeyType, data: any[] | {
+declare function hset(key: RedisKey, data: any[] | {
     [key: string]: any;
-} | Map<string, ValueType>): Promise<void>;
-declare function hgetall(key: KeyType): Promise<Record<string, string>>;
-declare function hget(key: KeyType, field: string): Promise<string>;
-declare function hdel(key: KeyType, args: KeyType[]): Promise<void>;
-declare function ttl(key: KeyType): Promise<number>;
+} | Map<string, RedisValue>): Promise<void>;
+declare function hgetall(key: RedisKey): Promise<Record<string, string>>;
+declare function hget(key: RedisKey, field: string): Promise<string>;
+declare function hdel(key: RedisKey, ...args: (string | Buffer)[]): Promise<void>;
+declare function ttl(key: RedisKey): Promise<number>;
 declare const _default: {
     initClient: typeof initClient;
     set: typeof set;

@@ -28,13 +28,21 @@ NX -- Only set the key if it does not already exist.
 XX -- Only set the key if it already exist.
 KEEPTTL -- Retain the time to live associated with the key
 */
-function set(key, value, expiryMode, time, setMode) {
+function set(key, value, expiryMode, time) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!!setMode) {
-            yield client.set(key, JSON.stringify(value), expiryMode, time, setMode);
-        }
-        else if (!!expiryMode) {
-            yield client.set(key, JSON.stringify(value), expiryMode, time);
+        if (!!expiryMode) {
+            if (expiryMode == 'NX') {
+                yield client.set(key, JSON.stringify(value), 'NX');
+            }
+            else if (expiryMode == 'XX') {
+                yield client.set(key, JSON.stringify(value), 'XX');
+            }
+            else if (expiryMode == 'EX') {
+                yield client.set(key, JSON.stringify(value), 'EX', time);
+            }
+            else if (expiryMode == 'PX') {
+                yield client.set(key, JSON.stringify(value), 'PX', time);
+            }
         }
         else {
             yield client.set(key, JSON.stringify(value));
@@ -79,9 +87,9 @@ function hget(key, field) {
         return result;
     });
 }
-function hdel(key, args) {
+function hdel(key, ...args) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield client.hdel(key, args);
+        yield client.hdel(key, ...args);
     });
 }
 function ttl(key) {
@@ -100,5 +108,5 @@ exports.default = {
     hgetall,
     hget,
     hdel,
-    ttl
+    ttl,
 };

@@ -55,9 +55,14 @@ function tokenVerify(req) {
             logger.debug('no token');
             return null;
         }
-        let tokenData = (yield (0, jsonwebtoken_1.verify)(token_str, config.SECRET_KEY));
-        tokenData.token = token_str;
-        return tokenData;
+        try {
+            let tokenData = (yield (0, jsonwebtoken_1.verify)(token_str, config.SECRET_KEY));
+            tokenData.token = token_str;
+            return tokenData;
+        }
+        catch (error) {
+            return null;
+        }
     });
 }
 function token2user(req) {
