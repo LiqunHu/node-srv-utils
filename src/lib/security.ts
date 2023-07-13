@@ -50,11 +50,7 @@ function user2token(type: string, userId: string): string | null {
 }
 
 async function tokenVerify(req: Request): Promise<DataStoredInToken | null> {
-  let token_str =
-    req.cookies['Authorization'] ||
-    (req.header('Authorization')
-      ? req.header('Authorization').split('Bearer ')[1]
-      : null)
+  let token_str = req.cookies['Authorization']
   if (!token_str) {
     logger.debug('no token')
     return null

@@ -47,10 +47,7 @@ function user2token(type, userId) {
 }
 function tokenVerify(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        let token_str = req.cookies['Authorization'] ||
-            (req.header('Authorization')
-                ? req.header('Authorization').split('Bearer ')[1]
-                : null);
+        let token_str = req.cookies['Authorization'];
         if (!token_str) {
             logger.debug('no token');
             return null;
