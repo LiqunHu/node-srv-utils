@@ -114,7 +114,7 @@ function token2user(req) {
             }
             else {
                 logger.error('Redis get authData failed');
-                return -1;
+                return -3;
             }
             return -1;
         }
