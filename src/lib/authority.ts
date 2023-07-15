@@ -52,6 +52,18 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction) {
             })
           }
         }
+      } else {
+        if (checkresult === -2) {
+          return res.status(401).send({
+            errno: -2,
+            msg: 'Login from other place',
+          })
+        } else if (checkresult === -3) {
+          return res.status(401).send({
+            errno: -1,
+            msg: 'Auth Failed or session expired',
+          })
+        }
       }
     } else {
       if (func != 'AUTH') {

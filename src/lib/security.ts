@@ -130,7 +130,7 @@ async function token2user(req: Request): Promise<number> {
       }
     } else {
       logger.error('Redis get authData failed')
-      return -1
+      return -3
     }
 
     return -1
