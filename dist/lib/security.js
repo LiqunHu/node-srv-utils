@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const crypto_js_1 = __importDefault(require("crypto-js"));
+const crypto_1 = require("crypto");
 const jsonwebtoken_1 = require("jsonwebtoken");
 const redisClient_1 = __importDefault(require("./redisClient"));
 let logger = console;
@@ -124,13 +124,20 @@ function token2user(req) {
         }
     });
 }
-function aesDecryptModeECB(msg, pwd) {
-    let key = crypto_js_1.default.enc.Utf8.parse(pwd);
-    let decrypted = crypto_js_1.default.AES.decrypt(msg, key, {
-        mode: crypto_js_1.default.mode.ECB,
-        padding: crypto_js_1.default.pad.ZeroPadding,
-    }).toString(crypto_js_1.default.enc.Utf8);
-    return decrypted;
+function aesDecryptModeCBC(msg, pwd) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let encrypted = Buffer.from(msg, 'base64');
+        let key = Buffer.from(pwd, 'hex');
+        let iv = new Uint8Array(16);
+        iv[0] = 1;
+        const key_encoded = yield crypto_1.webcrypto.subtle.importKey('raw', key, 'AES-CBC', false, ['encrypt', 'decrypt']);
+        const decrypted = yield crypto_1.webcrypto.subtle.encrypt({
+            name: 'AES-CBC',
+            iv: iv
+        }, key_encoded, encrypted);
+        const dec = new TextDecoder("utf-8");
+        return dec.decode(decrypted);
+    });
 }
 exports.default = {
     setLogger,
@@ -138,5 +145,5 @@ exports.default = {
     user2token,
     tokenVerify,
     token2user,
-    aesDecryptModeECB,
+    aesDecryptModeCBC,
 };

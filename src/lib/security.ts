@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js'
+import {webcrypto} from 'crypto'
 import { Request } from 'express'
 import { sign, verify } from 'jsonwebtoken'
 import redisClient from './redisClient'
@@ -140,14 +140,32 @@ async function token2user(req: Request): Promise<number> {
   }
 }
 
-function aesDecryptModeECB(msg: string, pwd: string): string {
-  let key = CryptoJS.enc.Utf8.parse(pwd)
+async function aesDecryptModeCBC(msg: string, pwd: string): Promise<string> {
+  let encrypted = Buffer.from(msg, 'base64')
+  
+  let key = Buffer.from(pwd, 'hex')
 
-  let decrypted = CryptoJS.AES.decrypt(msg, key, {
-    mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.ZeroPadding,
-  }).toString(CryptoJS.enc.Utf8)
-  return decrypted
+  let iv = new Uint8Array(16)
+  iv[0] = 1
+  
+  const key_encoded = await webcrypto.subtle.importKey(
+    'raw',
+    key,
+    'AES-CBC',
+    false,
+    ['encrypt', 'decrypt']
+  )
+
+  const decrypted =  await webcrypto.subtle.encrypt(
+    {
+      name: 'AES-CBC',
+      iv: iv
+    },
+    key_encoded,
+    encrypted
+  )
+  const dec = new TextDecoder("utf-8")
+  return dec.decode(decrypted) 
 }
 
 export default {
@@ -156,5 +174,5 @@ export default {
   user2token,
   tokenVerify,
   token2user,
-  aesDecryptModeECB,
+  aesDecryptModeCBC,
 }

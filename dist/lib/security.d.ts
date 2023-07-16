@@ -16,13 +16,13 @@ declare function setSecureConfig(cfg: SecureConfig): void;
 declare function user2token(type: string, userId: string): string | null;
 declare function tokenVerify(req: Request): Promise<DataStoredInToken | null>;
 declare function token2user(req: Request): Promise<number>;
-declare function aesDecryptModeECB(msg: string, pwd: string): string;
+declare function aesDecryptModeCBC(msg: string, pwd: string): Promise<string>;
 declare const _default: {
     setLogger: typeof setLogger;
     setSecureConfig: typeof setSecureConfig;
     user2token: typeof user2token;
     tokenVerify: typeof tokenVerify;
     token2user: typeof token2user;
-    aesDecryptModeECB: typeof aesDecryptModeECB;
+    aesDecryptModeCBC: typeof aesDecryptModeCBC;
 };
 export default _default;

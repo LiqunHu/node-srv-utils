@@ -23,7 +23,6 @@
   "homepage": "https://github.com/LiqunHu/node-srv-utils#readme",
   "dependencies": {
     "@alicloud/pop-core": "^1.7.10",
-    "crypto-js": "^4.1.1",
     "dayjs": "^1.10.8",
     "ioredis": "5.3.2",
     "jsonwebtoken": "^8.5.1",
@@ -33,7 +32,6 @@
     "node-schedule": "^2.1.0"
   },
   "devDependencies": {
-    "@types/crypto-js": "^4.1.1",
     "@types/express": "4.17.17",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/lodash": "^4.14.179",

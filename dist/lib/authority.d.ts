@@ -8,7 +8,7 @@ declare const _default: {
     setLogger: typeof setLogger;
     initMiddleware: typeof initMiddleware;
     authMiddleware: typeof authMiddleware;
-    aesDecryptModeECB: (msg: string, pwd: string) => string;
+    aesDecryptModeCBC: (msg: string, pwd: string) => Promise<string>;
     user2token: (type: string, userId: string) => string;
     tokenVerify: (req: Request<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>) => Promise<import("./security").DataStoredInToken>;
 };
