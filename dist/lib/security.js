@@ -126,17 +126,22 @@ function token2user(req) {
 }
 function aesDecryptModeCBC(msg, pwd) {
     return __awaiter(this, void 0, void 0, function* () {
-        let encrypted = Buffer.from(msg, 'base64');
-        let key = Buffer.from(pwd, 'hex');
-        let iv = new Uint8Array(16);
-        iv[0] = 1;
-        const key_encoded = yield crypto_1.webcrypto.subtle.importKey('raw', key, 'AES-CBC', false, ['encrypt', 'decrypt']);
-        const decrypted = yield crypto_1.webcrypto.subtle.encrypt({
-            name: 'AES-CBC',
-            iv: iv
-        }, key_encoded, encrypted);
-        const dec = new TextDecoder("utf-8");
-        return dec.decode(decrypted);
+        try {
+            let encrypted = Buffer.from(msg, 'base64');
+            let key = Buffer.from(pwd, 'hex');
+            let iv = new Uint8Array(16);
+            iv[0] = 1;
+            const key_encoded = yield crypto_1.webcrypto.subtle.importKey('raw', key, 'AES-CBC', false, ['encrypt', 'decrypt']);
+            const decrypted = yield crypto_1.webcrypto.subtle.encrypt({
+                name: 'AES-CBC',
+                iv: iv,
+            }, key_encoded, encrypted);
+            const dec = new TextDecoder('utf-8');
+            return dec.decode(decrypted);
+        }
+        catch (error) {
+            return '';
+        }
     });
 }
 exports.default = {

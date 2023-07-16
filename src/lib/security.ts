@@ -1,4 +1,4 @@
-import {webcrypto} from 'crypto'
+import { webcrypto } from 'crypto'
 import { Request } from 'express'
 import { sign, verify } from 'jsonwebtoken'
 import redisClient from './redisClient'
@@ -141,31 +141,35 @@ async function token2user(req: Request): Promise<number> {
 }
 
 async function aesDecryptModeCBC(msg: string, pwd: string): Promise<string> {
-  let encrypted = Buffer.from(msg, 'base64')
-  
-  let key = Buffer.from(pwd, 'hex')
+  try {
+    let encrypted = Buffer.from(msg, 'base64')
 
-  let iv = new Uint8Array(16)
-  iv[0] = 1
-  
-  const key_encoded = await webcrypto.subtle.importKey(
-    'raw',
-    key,
-    'AES-CBC',
-    false,
-    ['encrypt', 'decrypt']
-  )
+    let key = Buffer.from(pwd, 'hex')
 
-  const decrypted =  await webcrypto.subtle.encrypt(
-    {
-      name: 'AES-CBC',
-      iv: iv
-    },
-    key_encoded,
-    encrypted
-  )
-  const dec = new TextDecoder("utf-8")
-  return dec.decode(decrypted) 
+    let iv = new Uint8Array(16)
+    iv[0] = 1
+
+    const key_encoded = await webcrypto.subtle.importKey(
+      'raw',
+      key,
+      'AES-CBC',
+      false,
+      ['encrypt', 'decrypt']
+    )
+
+    const decrypted = await webcrypto.subtle.encrypt(
+      {
+        name: 'AES-CBC',
+        iv: iv,
+      },
+      key_encoded,
+      encrypted
+    )
+    const dec = new TextDecoder('utf-8')
+    return dec.decode(decrypted)
+  } catch (error) {
+    return ''
+  }
 }
 
 export default {
