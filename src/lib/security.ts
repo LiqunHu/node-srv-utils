@@ -157,7 +157,7 @@ async function aesDecryptModeCBC(msg: string, pwd: string): Promise<string> {
       ['encrypt', 'decrypt']
     )
 
-    const decrypted = await webcrypto.subtle.encrypt(
+    const decrypted = await webcrypto.subtle.decrypt(
       {
         name: 'AES-CBC',
         iv: iv,

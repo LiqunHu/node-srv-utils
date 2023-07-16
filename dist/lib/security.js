@@ -132,7 +132,7 @@ function aesDecryptModeCBC(msg, pwd) {
             let iv = new Uint8Array(16);
             iv[0] = 1;
             const key_encoded = yield crypto_1.webcrypto.subtle.importKey('raw', key, 'AES-CBC', false, ['encrypt', 'decrypt']);
-            const decrypted = yield crypto_1.webcrypto.subtle.encrypt({
+            const decrypted = yield crypto_1.webcrypto.subtle.decrypt({
                 name: 'AES-CBC',
                 iv: iv,
             }, key_encoded, encrypted);
