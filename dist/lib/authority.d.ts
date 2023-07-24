@@ -10,6 +10,6 @@ declare const _default: {
     authMiddleware: typeof authMiddleware;
     aesDecryptModeCBC: (msg: string, pwd: string) => Promise<string>;
     user2token: (type: string, userId: string) => string;
-    tokenVerify: (req: Request<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>) => Promise<import("./security").DataStoredInToken>;
+    tokenVerify: (req: Request<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>) => Promise<string | import("./security").DataStoredInToken>;
 };
 export default _default;

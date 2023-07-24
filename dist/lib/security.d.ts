@@ -14,7 +14,7 @@ export interface DataStoredInToken {
 declare function setLogger(createLogger: any): void;
 declare function setSecureConfig(cfg: SecureConfig): void;
 declare function user2token(type: string, userId: string): string | null;
-declare function tokenVerify(req: Request): Promise<DataStoredInToken | null>;
+declare function tokenVerify(req: Request): Promise<DataStoredInToken | null | string>;
 declare function token2user(req: Request): Promise<number>;
 declare function aesDecryptModeCBC(msg: string, pwd: string): Promise<string>;
 declare const _default: {

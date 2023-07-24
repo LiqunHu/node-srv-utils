@@ -49,7 +49,7 @@ function user2token(type: string, userId: string): string | null {
   }
 }
 
-async function tokenVerify(req: Request): Promise<DataStoredInToken | null> {
+async function tokenVerify(req: Request): Promise<DataStoredInToken | null | string> {
   let token_str = req.cookies['Authorization'] || req.header('Authorization')
   if (!token_str) {
     logger.debug('no token')
@@ -65,6 +65,9 @@ async function tokenVerify(req: Request): Promise<DataStoredInToken | null> {
     tokenData.token = token_str
     return tokenData
   } catch (error) {
+    if(error.name == 'TokenExpiredError') {
+      return 'TokenExpiredError'
+    }
     return null
   }
 }
@@ -72,6 +75,9 @@ async function tokenVerify(req: Request): Promise<DataStoredInToken | null> {
 async function token2user(req: Request): Promise<number> {
   try {
     let tokenData = await tokenVerify(req)
+    if(typeof tokenData == 'string' ) {
+      return -3
+    }
     if (!tokenData) {
       return -1
     }

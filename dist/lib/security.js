@@ -58,6 +58,9 @@ function tokenVerify(req) {
             return tokenData;
         }
         catch (error) {
+            if (error.name == 'TokenExpiredError') {
+                return 'TokenExpiredError';
+            }
             return null;
         }
     });
@@ -66,6 +69,9 @@ function token2user(req) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let tokenData = yield tokenVerify(req);
+            if (typeof tokenData == 'string') {
+                return -3;
+            }
             if (!tokenData) {
                 return -1;
             }
