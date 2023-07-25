@@ -21,7 +21,7 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction) {
     let apis = await redisClient.get('AUTHAPI')
     if (_.isEmpty(apis)) {
       let apiList = await dbhandle(
-        'select api_function, auth_flag from tbl_common_api where state = "1" and api_function != ""',
+        `select api_function, auth_flag from tbl_common_api where state = '1' and api_function != ''`,
         []
       )
 
