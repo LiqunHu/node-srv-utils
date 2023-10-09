@@ -27,7 +27,7 @@ function authMiddleware(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let apis = yield redisClient_1.default.get('AUTHAPI');
-            if (apis != null) {
+            if (apis === null) {
                 let apiList = yield dbh(`select api_function, auth_flag from tbl_common_api where state = '1' and api_function != ''`, []);
                 for (let a of apiList) {
                     apis[a.api_function] = a.auth_flag;
