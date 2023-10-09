@@ -1,26 +1,25 @@
-import _ from 'lodash'
 import { Request, Response, NextFunction } from 'express'
 import redisClient from './redisClient'
 import security from './security'
 export { SecureConfig } from './security'
 
 let logger = console
-let dbhandle: any
+let dbh: any
 
 function setLogger(createLogger: any) {
   logger = createLogger(__filename)
 }
 
 function initMiddleware(dbhandle: any, config: any) {
-  dbhandle = dbhandle
+  dbh = dbhandle
   security.setSecureConfig(config)
 }
 
 async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
     let apis = await redisClient.get('AUTHAPI')
-    if (_.isEmpty(apis)) {
-      let apiList = await dbhandle(
+    if (Object.keys(apis).length == 0) {
+      let apiList = await dbh(
         `select api_function, auth_flag from tbl_common_api where state = '1' and api_function != ''`,
         []
       )

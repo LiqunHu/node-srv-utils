@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import schedule from 'node-schedule'
 let logger = console
 let scheduleJobs: { [index: string]: any } = Object.create(null)
@@ -16,7 +15,7 @@ interface routerConfig {
 }
 function initSchedule(cfg: scheduleConfig[], router: routerConfig) {
   if (scheduleJobs) {
-    if (!_.isEmpty(scheduleJobs)) {
+    if (cfg.length != 0) {
       for (let job of Object.values(scheduleJobs)) {
         job.cancel()
       }

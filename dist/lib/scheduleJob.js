@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lodash_1 = __importDefault(require("lodash"));
 const node_schedule_1 = __importDefault(require("node-schedule"));
 let logger = console;
 let scheduleJobs = Object.create(null);
@@ -12,7 +11,7 @@ function setLogger(createLogger) {
 }
 function initSchedule(cfg, router) {
     if (scheduleJobs) {
-        if (!lodash_1.default.isEmpty(scheduleJobs)) {
+        if (cfg.length != 0) {
             for (let job of Object.values(scheduleJobs)) {
                 job.cancel();
             }

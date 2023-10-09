@@ -12,24 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lodash_1 = __importDefault(require("lodash"));
 const redisClient_1 = __importDefault(require("./redisClient"));
 const security_1 = __importDefault(require("./security"));
 let logger = console;
-let dbhandle;
+let dbh;
 function setLogger(createLogger) {
     logger = createLogger(__filename);
 }
 function initMiddleware(dbhandle, config) {
-    dbhandle = dbhandle;
+    dbh = dbhandle;
     security_1.default.setSecureConfig(config);
 }
 function authMiddleware(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let apis = yield redisClient_1.default.get('AUTHAPI');
-            if (lodash_1.default.isEmpty(apis)) {
-                let apiList = yield dbhandle(`select api_function, auth_flag from tbl_common_api where state = '1' and api_function != ''`, []);
+            if (Object.keys(apis).length == 0) {
+                let apiList = yield dbh(`select api_function, auth_flag from tbl_common_api where state = '1' and api_function != ''`, []);
                 for (let a of apiList) {
                     apis[a.api_function] = a.auth_flag;
                 }
