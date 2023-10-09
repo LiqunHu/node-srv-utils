@@ -18,7 +18,7 @@ function initMiddleware(dbhandle: any, config: any) {
 async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
     let apis = await redisClient.get('AUTHAPI')
-    if (Object.keys(apis).length == 0) {
+    if (apis != null) {
       let apiList = await dbh(
         `select api_function, auth_flag from tbl_common_api where state = '1' and api_function != ''`,
         []
